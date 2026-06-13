@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech Studio</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">🎙️</span>
+                <div>
+                    <h1>Text to Speech Studio</h1>
+                    <p class="subtitle">Create expressive audio with accents, emotions & background music</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <!-- Left Panel: Script Input -->
+            <div class="panel script-panel">
+                <div class="panel-header">
+                    <h2><span class="header-icon">📝</span> Your Script</h2>
+                    <span class="char-count" id="charCount">0 / 10000</span>
+                </div>
+                <textarea id="scriptInput" 
+                    placeholder="Paste your script here...&#10;&#10;Example: In a world where technology meets imagination, a new dawn rises. The storyteller begins their journey through realms of possibility and wonder." 
+                    maxlength="10000"></textarea>
+                <div class="script-tip">💡 <kbd>Ctrl + Enter</kbd> to generate</div>
+            </div>
+
+            <!-- Right Panel: Controls -->
+            <div class="panel controls-panel">
+                <div class="panel-header">
+                    <h2><span class="header-icon">🎛️</span> Voice Settings</h2>
+                </div>
+
+                <!-- Narrator Style -->
+                <div class="control-group">
+                    <label for="voicePreset">
+                        <span class="label-icon">🎭</span> Narrator Style
+                    </label>
+                    <div class="preset-cards" id="presetCards">
+                        <!-- Dynamic preset cards loaded by JS -->
+                    </div>
+                </div>
+
+                <!-- Emotion -->
+                <div class="control-group">
+                    <label for="emotionPreset">
+                        <span class="label-icon">😊</span> Emotion
+                    </label>
+                    <select id="emotionPreset">
+                        <option value="neutral">Neutral</option>
+                        <option value="warm">Warm</option>
+                        <option value="dramatic">Dramatic</option>
+                        <option value="energetic">Energetic</option>
+                        <option value="gentle">Gentle</option>
+                        <option value="formal">Formal</option>
+                        <option value="excited">Excited</option>
+                    </select>
+                </div>
+
+                <!-- Accent + Gender -->
+                <div class="control-group">
+                    <label>
+                        <span class="label-icon">🌍</span> Accent & Gender
+                    </label>
+                    <div class="accent-grid" id="accentGrid">
+                        <!-- Dynamic accent cards loaded by JS -->
+                    </div>
+                    <div class="gender-toggle" id="genderToggle">
+                        <button class="gender-btn active" data-gender="male">👨 Male</button>
+                        <button class="gender-btn" data-gender="female">👩 Female</button>
+                    </div>
+                </div>
+
+                <!-- Speed Slider -->
+                <div class="control-group">
+                    <label for="speedSlider">
+                        <span class="label-icon">⚡</span> Speed: <span id="speedValue">1.0x</span>
+                    </label>
+                    <div class="slider-container">
+                        <span class="slider-label">0.3x</span>
+                        <input type="range" id="speedSlider" min="0.3" max="3.0" step="0.1" value="1.0">
+                        <span class="slider-label">3.0x</span>
+                    </div>
+                    <div class="speed-marks">
+                        <span>🐢 Slow</span>
+                        <span>🎯 Normal</span>
+                        <span>🐇 Fast</span>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <hr class="divider">
+
+                <!-- Background Music -->
+                <div class="panel-header">
+                    <h2><span class="header-icon">🎵</span> Background Music</h2>
+                </div>
+
+                <div class="music-grid" id="musicGrid">
+                    <!-- Dynamic music cards loaded by JS -->
+                </div>
+
+                <div class="control-group">
+                    <label for="musicVolume">
+                        <span class="label-icon">🔊</span> Music Volume: <span id="musicVolumeValue">30%</span>
+                    </label>
+                    <div class="slider-container">
+                        <span class="slider-label">0%</span>
+                        <input type="range" id="musicVolume" min="0" max="100" step="5" value="30">
+                        <span class="slider-label">100%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Settings Summary -->
+        <div class="settings-summary" id="settingsSummary">
+            <div class="summary-item"><span>🎭</span> <span id="summaryPreset">Storyteller</span></div>
+            <div class="summary-item"><span>😊</span> <span id="summaryEmotion">Neutral</span></div>
+            <div class="summary-item"><span>🌍</span> <span id="summaryAccent">🇺🇸 US English</span></div>
+            <div class="summary-item"><span>⚡</span> <span id="summarySpeed">1.0x</span></div>
+            <div class="summary-item"><span>🎵</span> <span id="summaryMusic">No Music</span></div>
+        </div>
+
+        <!-- Generate Button -->
+        <div class="generate-section">
+            <button id="generateBtn" class="btn-generate">
+                <span class="btn-icon">🔊</span>
+                Generate Audio
+            </button>
+            <div id="loadingIndicator" class="loading hidden">
+                <div class="spinner"></div>
+                <span>Generating audio with voice, emotion & music...</span>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <div id="outputSection" class="output-section hidden">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2><span class="header-icon">🎧</span> Output</h2>
+                    <span class="badge success">✅ Ready</span>
+                </div>
+                <div class="output-content">
+                    <div class="audio-player-wrapper">
+                        <audio id="audioPlayer" controls>
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    <div class="output-actions">
+                        <button id="downloadBtn" class="btn-download">
+                            <span>⬇️</span> Download MP3
+                        </button>
+                        <button id="regenerateBtn" class="btn-secondary">
+                            <span>🔄</span> Try Different Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Toast -->
+        <div id="errorToast" class="toast hidden">
+            <span id="errorMessage"></span>
+            <button onclick="closeToast()">✕</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>🎙️ Text to Speech Studio — Free & Local | Powered by edge-tts 🚀</p>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
