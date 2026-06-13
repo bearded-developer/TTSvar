@@ -67,7 +67,7 @@ sudo apt install ffmpeg
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/TTSvar.git
+git clone https://github.com/bearded-developer/TTSvar.git
 cd TTSvar
 
 # 2. Create a virtual environment (recommended)
@@ -330,4 +330,4 @@ MIT License — free to use, modify, and distribute.
 
 ---
 
-<p align="center">Made with 🎙️ by <a href="https://github.com/YOUR_USERNAME">Your Name</a></p>
+<p align="center">Made with 🎙️ by <a href="https://github.com/bearded-developer">bearded-developer</a></p>
